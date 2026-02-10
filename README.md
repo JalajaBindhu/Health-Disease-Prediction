@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 🏥 Health Disease Prediction System
 
 📌 Project Overview
@@ -16,3 +17,6 @@ NumPy
 Scikit-Learn
 Jupyter Notebook
 Pickle (Model Serialization)
+=======
+# Health-Disease-Prediction
+>>>>>>> 34ea833054465fd27c459ff94a3f784eaa12b8fb
