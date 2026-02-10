@@ -67,15 +67,37 @@ def predict_heart(data: HeartInput):
 
 @app.post("/predict/diabetes")
 def predict_diabetes(data: DiabetesInput):
+    try:
+        input_df = pd.DataFrame([data.dict()])
 
-    input_df = pd.DataFrame([data.dict()], columns=diabetes_columns)
-    prediction = diabetes_model.predict(input_df)[0]
+        # Rename columns to match model training
+        input_df = input_df.rename(columns={
+            "pregnancies": "Pregnancies",
+            "glucose": "Glucose",
+            "bloodpressure": "BloodPressure",
+            "skinthickness": "SkinThickness",
+            "insulin": "Insulin",
+            "bmi": "BMI",
+            "dpf": "DiabetesPedigreeFunction",
+            "age": "Age"
+        })
 
-    return {
-        "disease": "Diabetes",
-        "prediction": int(prediction),
-        "result": "Detected" if prediction == 1 else "Not Detected"
-    }
+        # Reorder columns
+        input_df = input_df[diabetes_columns]
+
+        prediction = diabetes_model.predict(input_df)[0]
+
+        return {
+            "disease": "Diabetes",
+            "prediction": int(prediction),
+            "result": "Detected" if prediction == 1 else "Not Detected"
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "received_columns": list(input_df.columns),
+            "expected_columns": diabetes_columns
+        }
 
 
 
